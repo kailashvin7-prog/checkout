@@ -18,9 +18,8 @@ button{width:100%;padding:14px;background:#fb641b;color:#fff;border:none;border-
 <div class="box">
 <h2>Checkout</h2>
 
-<h3>Bluetooth Earbuds</h3>
-<p class="price">₹999</p>
-
+<h3 id="productName">Product</h3>
+<p class="price" id="productPrice">₹0</p>
 <input type="text" placeholder="Full Name" required>
 <input type="tel" placeholder="Mobile Number" required>
 <textarea placeholder="Full Address"></textarea>
@@ -31,8 +30,16 @@ button{width:100%;padding:14px;background:#fb641b;color:#fff;border:none;border-
 </div>
 
 <script>
-function payNow(){
-window.location.href="upi://pay?pa=75687358@ybl&pn=Kailash&cu=INR";
+const params = new URLSearchParams(window.location.search);
+
+const product = params.get("product") || "Bluetooth Earbuds";
+const price = params.get("price") || "999";
+
+document.getElementById("productName").innerText = product;
+document.getElementById("productPrice").innerText = "₹" + price;
+
+function payNow() {
+    window.location.href = "upi://pay?pa=75687358@ybl&pn=Kailash&am=" + price + "&pn=Kailash&cu=INR";
 }
 </script>
 
