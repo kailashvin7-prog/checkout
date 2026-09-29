@@ -21,7 +21,7 @@
 
     .container {
       max-width: 500px;
-      margin: auto;
+      margin: 30px auto;
       background: white;
       padding: 25px;
       border-radius: 12px;
@@ -30,8 +30,8 @@
 
     h1 {
       text-align: center;
-      margin-bottom: 8px;
       color: #222;
+      margin-bottom: 8px;
     }
 
     .subtitle {
@@ -49,21 +49,13 @@
     }
 
     input,
-    textarea,
-    select {
+    textarea {
       width: 100%;
       padding: 12px;
       margin-bottom: 18px;
       border: 1px solid #ccc;
       border-radius: 7px;
       font-size: 15px;
-      outline: none;
-    }
-
-    input:focus,
-    textarea:focus,
-    select:focus {
-      border-color: #2874f0;
     }
 
     textarea {
@@ -73,7 +65,7 @@
 
     .photo-box {
       border: 2px dashed #bbb;
-      padding: 20px;
+      padding: 18px;
       text-align: center;
       border-radius: 8px;
       margin-bottom: 20px;
@@ -81,7 +73,7 @@
 
     .photo-box input {
       border: none;
-      margin: 10px 0 0;
+      margin: 12px 0 0;
       padding: 0;
     }
 
@@ -97,99 +89,206 @@
       cursor: pointer;
     }
 
-    button:hover {
-      background: #1259c7;
+    button:disabled {
+      background: #999;
     }
 
     .required {
       color: red;
+    }
+
+    #message {
+      text-align: center;
+      margin-top: 15px;
+      font-weight: bold;
     }
   </style>
 </head>
 
 <body>
 
-  <div class="container">
+<div class="container">
 
-    <h1>Customer Registration</h1>
-    <p class="subtitle">Please fill in your details</p>
+  <h1>Customer Registration</h1>
+  <p class="subtitle">Please fill in your details</p>
 
-    <form id="customerForm">
+  <form id="customerForm">
 
-      <label>
-        Customer Name <span class="required">*</span>
-      </label>
+    <label>
+      Customer Name <span class="required">*</span>
+    </label>
+    <input
+      type="text"
+      id="name"
+      placeholder="Enter your full name"
+      required
+    >
+
+    <label>
+      Age <span class="required">*</span>
+    </label>
+    <input
+      type="number"
+      id="age"
+      placeholder="Enter your age"
+      min="1"
+      max="100"
+      required
+    >
+
+    <label>
+      Qualification <span class="required">*</span>
+    </label>
+    <input
+      type="text"
+      id="qualification"
+      placeholder="Example: 12th, Graduate, B.A., B.Tech"
+      required
+    >
+
+    <label>
+      Mobile Number <span class="required">*</span>
+    </label>
+    <input
+      type="tel"
+      id="mobile"
+      placeholder="Enter 10 digit mobile number"
+      maxlength="10"
+      pattern="[0-9]{10}"
+      required
+    >
+
+    <label>
+      Full Address <span class="required">*</span>
+    </label>
+    <textarea
+      id="address"
+      placeholder="Enter your full address"
+      required
+    ></textarea>
+
+    <label>
+      Upload Photo <span class="required">*</span>
+    </label>
+
+    <div class="photo-box">
+      <p>Select your photo</p>
+
       <input
-        type="text"
-        name="name"
-        placeholder="Enter your full name"
+        type="file"
+        id="photo"
+        accept="image/*"
         required
       >
+    </div>
 
-      <label>
-        Age <span class="required">*</span>
-      </label>
-      <input
-        type="number"
-        name="age"
-        placeholder="Enter your age"
-        min="1"
-        max="100"
-        required
-      >
+    <button type="submit" id="submitBtn">
+      Submit
+    </button>
 
-      <label>
-        Qualification <span class="required">*</span>
-      </label>
-      <input
-        type="text"
-        name="qualification"
-        placeholder="Example: 12th, Graduate, B.A., B.Tech"
-        required
-      >
+    <div id="message"></div>
 
-      <label>
-        Mobile Number <span class="required">*</span>
-      </label>
-      <input
-        type="tel"
-        name="mobile"
-        placeholder="Enter mobile number"
-        maxlength="10"
-        pattern="[0-9]{10}"
-        required
-      >
+  </form>
 
-      <label>
-        Full Address <span class="required">*</span>
-      </label>
-      <textarea
-        name="address"
-        placeholder="Enter your full address"
-        required
-      ></textarea>
+</div>
 
-      <label>
-        Upload Photo <span class="required">*</span>
-      </label>
 
-      <div class="photo-box">
-        <p>Select your photo</p>
-        <input
-          type="file"
-          name="photo"
-          accept="image/*"
-          required
-        >
-      </div>
+<script>
 
-      <button type="submit">
-        Submit
-      </button>
+  // आपका Google Apps Script Web App URL
+  const SCRIPT_URL =
+  "https://script.google.com/macros/s/AKfycbzySNtgMnpwa-L4rXfS4xL0BUWt54oxcmsd2_g7qumKZwiIy8La-BFhZnm-bNFad-MqsA/exec";
 
-    </form>
 
-  </div>
+  document.getElementById("customerForm").addEventListener("submit", async function(e) {
+
+    e.preventDefault();
+
+    const submitBtn = document.getElementById("submitBtn");
+    const message = document.getElementById("message");
+    const photoInput = document.getElementById("photo");
+
+    const file = photoInput.files[0];
+
+    if (!file) {
+      message.textContent = "Please select a photo.";
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Submitting...";
+    message.textContent = "";
+
+    try {
+
+      // Photo को Base64 में convert करना
+      const reader = new FileReader();
+
+      reader.onload = async function() {
+
+        const data = {
+
+          name: document.getElementById("name").value,
+          age: document.getElementById("age").value,
+          qualification: document.getElementById("qualification").value,
+          mobile: document.getElementById("mobile").value,
+          address: document.getElementById("address").value,
+
+          photo: file.name,
+          photoType: file.type,
+          photoData: reader.result
+        };
+
+
+        const response = await fetch(SCRIPT_URL, {
+
+          method: "POST",
+
+          body: JSON.stringify(data)
+
+        });
+
+
+        const result = await response.json();
+
+
+        if (result.status === "success") {
+
+          message.textContent =
+          "Registration submitted successfully!";
+
+          document.getElementById("customerForm").reset();
+
+        } else {
+
+          message.textContent =
+          "Error: " + result.message;
+
+        }
+
+
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Submit";
+
+      };
+
+
+      reader.readAsDataURL(file);
+
+
+    } catch (error) {
+
+      message.textContent =
+      "Something went wrong. Please try again.";
+
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Submit";
+
+    }
+
+  });
+
+</script>
 
 </body>
 </html>
