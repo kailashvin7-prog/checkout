@@ -1,47 +1,195 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Checkout</title>
-<style>
-body{font-family:Arial;background:#f1f3f6;margin:0}
-.box{max-width:500px;margin:20px auto;background:#fff;padding:20px;border-radius:10px;box-shadow:0 0 10px #ccc}
-h2{color:#2874f0}
-input,textarea{width:100%;padding:10px;margin:8px 0;border:1px solid #ccc;border-radius:5px}
-button{width:100%;padding:14px;background:#fb641b;color:#fff;border:none;border-radius:5px;font-size:18px;cursor:pointer}
-.price{font-size:22px;color:green;font-weight:bold}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Customer Registration</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f2f4f7;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: auto;
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.10);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 8px;
+      color: #222;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #777;
+      margin-bottom: 25px;
+      font-size: 14px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 7px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 18px;
+      border: 1px solid #ccc;
+      border-radius: 7px;
+      font-size: 15px;
+      outline: none;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: #2874f0;
+    }
+
+    textarea {
+      height: 100px;
+      resize: vertical;
+    }
+
+    .photo-box {
+      border: 2px dashed #bbb;
+      padding: 20px;
+      text-align: center;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+
+    .photo-box input {
+      border: none;
+      margin: 10px 0 0;
+      padding: 0;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      background: #2874f0;
+      color: white;
+      border: none;
+      border-radius: 7px;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #1259c7;
+    }
+
+    .required {
+      color: red;
+    }
+  </style>
 </head>
+
 <body>
 
-<div class="box">
-<h2>Checkout</h2>
+  <div class="container">
 
-<h3 id="productName">Product</h3>
-<p class="price" id="productPrice">₹0</p>
-<input type="text" placeholder="Full Name" required>
-<input type="tel" placeholder="Mobile Number" required>
-<textarea placeholder="Full Address"></textarea>
-<input type="text" placeholder="PIN Code">
+    <h1>Customer Registration</h1>
+    <p class="subtitle">Please fill in your details</p>
 
-<button onclick="payNow()">Continue to Payment</button>
+    <form id="customerForm">
 
-</div>
+      <label>
+        Customer Name <span class="required">*</span>
+      </label>
+      <input
+        type="text"
+        name="name"
+        placeholder="Enter your full name"
+        required
+      >
 
-<script>
-const params = new URLSearchParams(window.location.search);
+      <label>
+        Age <span class="required">*</span>
+      </label>
+      <input
+        type="number"
+        name="age"
+        placeholder="Enter your age"
+        min="1"
+        max="100"
+        required
+      >
 
-const product = params.get("product") || "Bluetooth Earbuds";
-const price = params.get("price") || "999";
+      <label>
+        Qualification <span class="required">*</span>
+      </label>
+      <input
+        type="text"
+        name="qualification"
+        placeholder="Example: 12th, Graduate, B.A., B.Tech"
+        required
+      >
 
-document.getElementById("productName").innerText = product;
-document.getElementById("productPrice").innerText = "₹" + price;
+      <label>
+        Mobile Number <span class="required">*</span>
+      </label>
+      <input
+        type="tel"
+        name="mobile"
+        placeholder="Enter mobile number"
+        maxlength="10"
+        pattern="[0-9]{10}"
+        required
+      >
 
-function payNow() {
-    window.location.href = "upi://pay?pa=75687358@ybl&pn=Kailash&am=" + price + "&pn=Kailash&cu=INR";
-}
-</script>
+      <label>
+        Full Address <span class="required">*</span>
+      </label>
+      <textarea
+        name="address"
+        placeholder="Enter your full address"
+        required
+      ></textarea>
+
+      <label>
+        Upload Photo <span class="required">*</span>
+      </label>
+
+      <div class="photo-box">
+        <p>Select your photo</p>
+        <input
+          type="file"
+          name="photo"
+          accept="image/*"
+          required
+        >
+      </div>
+
+      <button type="submit">
+        Submit
+      </button>
+
+    </form>
+
+  </div>
 
 </body>
 </html>
